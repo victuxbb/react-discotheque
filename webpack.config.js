@@ -1,10 +1,17 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
+    mode: 'development',
+    entry: {
+        app: './src/index.js'
+    },
     devtool: 'cheap-module-eval-source-map',
-    entry: './src/index.js',
+    devServer: {
+        hot: true
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -61,6 +68,8 @@ module.exports = {
             template: __dirname + '/src/index.html',
             filename: 'index.html',
             inject: 'body'
-        })
+        }),
+        new webpack.NamedModulesPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ]
 };
