@@ -2,57 +2,35 @@ import React, { Component } from 'react';
 
 import { Wrapper, Title, PeopleQueue } from './Queue_styles';
 
+import connect from '../../../connect'
+
 class Queue extends Component {
-  state = {
-    people: [
-      { id: 1, name: "Oscar", dressStyle: "DRESSED_INFORMALLY" },
-      { id: 2, name: "Victor", dressStyle: "DRESSED_FORMALLY" },
-      { id: 3, name: "Rafa", dressStyle: "DRESSED_INFORMALLY" },
-      { id: 4, name: "Alex", dressStyle: "DRESSED_FORMALLY"},
-      { id: 5, name: "Pablo", dressStyle: "DRESSED_FORMALLY"}
-    ], 
+  state = {     
     inputValue: ''
   }
 
   renderQueue() {
-    return this.state.people.map((person, index) => {
+    const {queueModel, eventBus} = this.props
+    eventBus.raiseEvent({event: {text: 'Se esta renderizando la cola de la discoteca'}})
+    return queueModel.people.map((person, index) => {
       return (
         <li key={person.id} >
           <span>{person.name}</span>
-          <button onClick={() => this.deletePersonOnTheQueue(index + 1)} >X</button>
+          <button onClick={() => queueModel.deletePersonOnTheQueue(index + 1)} >Sacar de la cola</button>
+          <button onClick={() => queueModel.transferToDisco(index + 1)} >Acceso</button>
+          <button onClick={() => queueModel.checkDressCode(index + 1)} >Check dress code</button>
         </li>
       )
     })
   }
 
-  deletePersonOnTheQueue = (indexPersonToDelete) => {
-    const people = this.state.people
-    people.splice(indexPersonToDelete - 1, 1)
-    this.setState({people: people})
-  }
-
   onInputChange = (event) => {
     this.setState({ inputValue: event.target.value })
   }
-
-  onAdd = () => {
-    const lastPersonIdOnTheQueue = this.state.people[this.state.people.length - 1].id;
-    this.setState({
-      people: [
-        ...this.state.people,
-        { id: lastPersonIdOnTheQueue + 1, name: this.state.inputValue, dressStyle: this.randomDressCode() }
-      ]
-    })
-    this.setState({ inputValue: '' })
-  }
-
-  randomDressCode() {
-    const dressCode = ["DRESSED_FORMALLY", "DRESSED_INFORMALLY"];
-    const randomNumber = Math.floor(Math.random() * 2)
-    return dressCode[randomNumber]
-  }
-
+  
   render() {
+    const { queueModel } = this.props;
+
     return (
       <Wrapper>
         <Title>Cola</Title>
@@ -63,7 +41,7 @@ class Queue extends Component {
           value={this.state.inputValue}
           onChange={this.onInputChange}
         />
-        <button onClick={this.onAdd} >Add to queue</button>
+        <button onClick={(data) => queueModel.addPerson(data)} >Add to queue</button>
       </Wrapper>
     )
   }
