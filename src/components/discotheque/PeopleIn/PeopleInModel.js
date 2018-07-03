@@ -1,18 +1,15 @@
-export default class PeopleInModel {
-  constructor ({ people, eventBus }) {
-    this.people = people
-    this._eventBus = eventBus
-  }
+export const state = () => ({
+  people: [
+    { id: 42, name: "Manager", dressStyle: "DRESSED_INFORMALLY" },
+    { id: 43, name: "BigBoss", dressStyle: "DRESSED_FORMALLY" },
+    { id: 44, name: "SuperManager", dressStyle: "DRESSED_INFORMALLY" },
+    { id: 45, name: "HyperManager", dressStyle: "DRESSED_FORMALLY"},
+    { id: 46, name: "Lider de la liga Pokemon", dressStyle: "DRESSED_FORMALLY"}
+  ]
+})
 
-  consumeDrink(indexPersonToDelete, price) {
-    // TODO: Lanzar un evento que aumente el valor de las ganancias de la noche en el 'price'
-    this._eventBus.raiseEvent({event: {text: 'Se ha comprado una bebida'}})
-  }
+export const deletePersonInTheDiscotheque = (currentState, idPersonToDelete) =>
+  ({...currentState, people: currentState.people.filter(person => person.id !== idPersonToDelete)})
 
-  deletePersonInTheDiscotheque(indexPersonToDelete) {
-    this.people.splice(indexPersonToDelete - 1, 1)
-    this._eventBus.raiseEvent({event: {text: 'Se marcha de la discoteca'}})
-    // TODO: Eliminar persona de la cola
-    // TODO: Modificar el aforo
-  }
-}
+export const addPersonInTheDiscotheque = (currentState, person) =>
+  ({...currentState, people: currentState.people.concat([person])})

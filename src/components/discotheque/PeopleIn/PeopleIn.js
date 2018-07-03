@@ -4,14 +4,12 @@ import { Wrapper, Title, PeopleInTheDiscotheque } from './PeopleIn_styles'
 
 class PeopleIn extends Component {
   renderPeopleIn() {
-    const {peopleInModel, eventBus} = this.props
-    eventBus.raiseEvent({event: {text: 'Se esta renderizando la gente dentro de la discoteca'}})
-    return peopleInModel.people.map((person, index) => {
+    const {peopleIn, personInTheDiscothequeDeleted} = this.props
+    return peopleIn.people.map((person) => {
       return (
         <li key={person.id} >
           <span>{person.name}</span>
-          <button onClick={() => peopleInModel.consumeDrink(index + 1)} >Drink</button>
-          <button onClick={() => peopleInModel.deletePersonInTheDiscotheque(index + 1)} >X</button>
+          <button onClick={() => personInTheDiscothequeDeleted(person.id)} >X</button>
         </li>
       )
     })

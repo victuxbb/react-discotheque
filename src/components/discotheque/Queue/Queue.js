@@ -2,23 +2,20 @@ import React, { Component } from 'react';
 
 import { Wrapper, Title, PeopleQueue } from './Queue_styles';
 
-import connect from '../../../connect'
-
 class Queue extends Component {
   state = {     
     inputValue: ''
   }
 
   renderQueue() {
-    const {queueModel, eventBus} = this.props
-    eventBus.raiseEvent({event: {text: 'Se esta renderizando la cola de la discoteca'}})
-    return queueModel.people.map((person, index) => {
+    const {peopleQueue, personOnTheQueueDeleted, tranferPersonToTheDiscothequeRequested} = this.props
+
+    return peopleQueue.people.map(person => {
       return (
         <li key={person.id} >
           <span>{person.name}</span>
-          <button onClick={() => queueModel.deletePersonOnTheQueue(index + 1)} >Sacar de la cola</button>
-          <button onClick={() => queueModel.transferToDisco(index + 1)} >Acceso</button>
-          <button onClick={() => queueModel.checkDressCode(index + 1)} >Check dress code</button>
+          <button onClick={() => personOnTheQueueDeleted(person.id)} >Sacar de la cola</button>
+          <button onClick={() => tranferPersonToTheDiscothequeRequested(person)} >Enviar a la Discoteca</button>
         </li>
       )
     })
@@ -29,8 +26,6 @@ class Queue extends Component {
   }
   
   render() {
-    const { queueModel } = this.props;
-
     return (
       <Wrapper>
         <Title>Cola</Title>
@@ -41,7 +36,7 @@ class Queue extends Component {
           value={this.state.inputValue}
           onChange={this.onInputChange}
         />
-        <button onClick={(data) => queueModel.addPerson(data)} >Add to queue</button>
+        <button>Add to queue</button>
       </Wrapper>
     )
   }
